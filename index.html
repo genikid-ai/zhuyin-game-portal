@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#fff9ea" />
+    <meta name="referrer" content="no-referrer" />
+    <title>注音與語文遊樂園｜童趣繪本學習首頁</title>
+    <meta name="description" content="整合注音符號、結合韻與四個年段語文闖關的童趣繪本遊戲首頁。" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Chiron+GoRound+TC:wght@500;700;800&family=Noto+Sans+TC:wght@500;700;900&display=swap"
+    />
+    <link rel="stylesheet" href="styles.css?v=portal-v3" />
+  </head>
+  <body>
+    <div class="portal-stage">
+      <!-- 柔光與飄浮小星點裝飾 -->
+      <div class="stage-decor" aria-hidden="true">
+        <span class="sparkle sp-1">✦</span>
+        <span class="sparkle sp-2">★</span>
+        <span class="sparkle sp-3">✦</span>
+        <span class="sparkle sp-4">★</span>
+        <span class="sparkle sp-5">✦</span>
+      </div>
+
+      <!-- 右上角工具列（音效開關 + 全螢幕） -->
+      <div class="utility-bar" aria-label="畫面控制工具">
+        <button
+          id="btn-sound"
+          class="util-btn"
+          type="button"
+          aria-pressed="true"
+          title="開啟或關閉按鈕音效"
+        >
+          <span class="util-icon" aria-hidden="true">🔊</span>
+          <span class="util-text">音效開</span>
+        </button>
+        <button
+          id="btn-fullscreen"
+          class="util-btn util-btn--icon"
+          type="button"
+          aria-label="切換全螢幕"
+          title="切換全螢幕"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- 主內容區 -->
+      <main class="portal-container">
+        <header class="portal-header">
+          <h1 class="portal-title" id="portal-title">注音與語文遊樂園</h1>
+          <p class="portal-subtitle" id="portal-subtitle">
+            挑選喜歡的關卡，一起大聲唸注音、開心收集閃亮星星吧！
+          </p>
+        </header>
+
+        <!-- 第一區：自由練習區（免密碼，點選直接開啟） -->
+        <section class="portal-section section-open" aria-labelledby="heading-open">
+          <div class="section-head">
+            <h2 id="heading-open" class="section-title">
+              <span class="section-pill pill-open">🌱 快樂練習區</span>
+            </h2>
+            <span class="section-hint">免密碼・點選即可直接開啟</span>
+          </div>
+          <div id="open-games-grid" class="open-grid"></div>
+        </section>
+
+        <!-- 第二區：語文闖關區（需密碼，絕不儲存於瀏覽器或帳號） -->
+        <section class="portal-section section-locked" aria-labelledby="heading-locked">
+          <div class="section-head">
+            <h2 id="heading-locked" class="section-title">
+              <span class="section-pill pill-locked">🔒 語文闖關區</span>
+            </h2>
+            <span class="section-hint">需輸入密碼開啟・密碼不儲存於瀏覽器或帳號</span>
+          </div>
+          <div id="locked-games-grid" class="locked-grid"></div>
+        </section>
+      </main>
+
+      <!-- 底部版權宣告 -->
+      <footer class="portal-copyright" id="portal-copyright">© 傑尼爾教育文化事業集團 版權所有</footer>
+    </div>
+
+    <!-- 無痕自訂觸控數字密碼彈窗（刻意不使用 form / input，徹底阻斷瀏覽器與帳號記憶密碼） -->
+    <div
+      id="pin-modal"
+      class="modal-backdrop"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-game-title"
+      aria-hidden="true"
+      hidden
+    >
+      <div class="pin-dialog" id="pin-dialog">
+        <button
+          id="btn-modal-close"
+          class="modal-close-btn"
+          type="button"
+          aria-label="關閉密碼視窗"
+          title="關閉（Esc）"
+        >
+          ✕
+        </button>
+
+        <div class="modal-target-banner" id="modal-target-banner">
+          <img id="modal-mascot" class="modal-mascot" src="" alt="" draggable="false" />
+          <div class="modal-target-meta">
+            <span class="modal-stage-tag" id="modal-stage-tag">中上</span>
+            <h3 class="modal-game-title" id="modal-game-title">語詞配對</h3>
+            <p class="modal-game-sub" id="modal-game-sub">請輸入闖關密碼以開啟遊戲</p>
+          </div>
+        </div>
+
+        <div class="privacy-notice" role="note">
+          <span aria-hidden="true">🛡️</span>
+          <span>本次僅即時驗證，密碼絕不會儲存於瀏覽器或任何帳號</span>
+        </div>
+
+        <!-- 視覺圓點指示區（非原生 input，避免瀏覽器自動填入或詢問儲存密碼） -->
+        <div class="pin-display-wrap" id="pin-display-wrap">
+          <div
+            id="pin-dots"
+            class="pin-dots"
+            role="status"
+            aria-live="polite"
+            aria-label="已輸入 0 碼密碼"
+          ></div>
+          <p id="pin-feedback" class="pin-feedback" role="alert"></p>
+        </div>
+
+        <!-- 觸控友善大顆數字鍵盤 -->
+        <div class="keypad-grid" id="keypad-grid" role="group" aria-label="數字密碼鍵盤">
+          <button class="key-btn" type="button" data-digit="1">1</button>
+          <button class="key-btn" type="button" data-digit="2">2</button>
+          <button class="key-btn" type="button" data-digit="3">3</button>
+          <button class="key-btn" type="button" data-digit="4">4</button>
+          <button class="key-btn" type="button" data-digit="5">5</button>
+          <button class="key-btn" type="button" data-digit="6">6</button>
+          <button class="key-btn" type="button" data-digit="7">7</button>
+          <button class="key-btn" type="button" data-digit="8">8</button>
+          <button class="key-btn" type="button" data-digit="9">9</button>
+          <button class="key-btn key-btn--muted" type="button" data-action="clear">清除</button>
+          <button class="key-btn" type="button" data-digit="0">0</button>
+          <button class="key-btn key-btn--muted" type="button" data-action="backspace" aria-label="退格刪除">
+            ⌫
+          </button>
+        </div>
+
+        <div class="modal-actions">
+          <button id="btn-pin-confirm" class="btn-unlock-submit" type="button" disabled>
+            <span aria-hidden="true">🔓</span>
+            <span id="btn-pin-confirm-text">確認解鎖並開啟</span>
+          </button>
+          <a
+            id="btn-direct-launch"
+            class="btn-direct-launch"
+            href="#"
+            target="_blank"
+            rel="noopener noreferrer"
+            hidden
+          >
+            <span aria-hidden="true">🎉</span>
+            <span id="btn-direct-launch-text">驗證成功！點一下開啟遊戲 ▶</span>
+          </a>
+        </div>
+
+        <p class="keyboard-tip">也可直接使用電腦數字鍵輸入，按 Enter 確認、Esc 關閉</p>
+      </div>
+    </div>
+
+    <!-- 柔和提示氣泡 -->
+    <div id="portal-toast" class="portal-toast" role="status" aria-live="polite" hidden></div>
+
+    <script src="crypto-vault.js?v=portal-v3"></script>
+    <script src="config.js?v=portal-v3"></script>
+    <script src="app.js?v=portal-v3"></script>
+  </body>
+</html>
